@@ -2,58 +2,74 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\LogoutRequest;
+use App\Http\Requests\Auth\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function register(Request $req)
+    public function register(RegisterRequest $request)
     {
-        //data validation       
-        $req->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed'
-        ]);
+        try {
 
-        //register the user
-        $user = new User();
-        $user->name = $req->name;
-        $user->email = $req->email;
-        $user->password = Hash::make($req->password);
-        $user->save();        
+            $user = User::create([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password'))
+            ]);
 
-        //reponse
-        return response($user, Response::HTTP_CREATED);
-    }
+            $token = $user->createToken('user_token')->plainTextToken;
+            
+            return response()->json([ 'user' => $user, 'token' => $token ], 200);
 
-    public function login(Request $req)
-    {
-        //data validation       
-        $credentials = $req->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        if (!Auth::attempt($credentials)){
-            return response(["message"=>'Invalid credentials'],Response::HTTP_UNAUTHORIZED);            
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'message' => 'Something went wrong in AuthController.register'
+            ]);
         }
-
-        /** @var User $user */
-        $user = Auth::user();
-        $token = $user->createToken('token')->plainTextToken;
-        return response(["token"=>$token, "user"=>$user], Response::HTTP_OK);
     }
 
-    public function logout(Request $req)
+    public function login(LoginRequest $request)
     {
-        /** @var User $user */
-        $user = $req->user();
-        $user->currentAccessToken()->delete();
-        return response('', Response::HTTP_NOT_MODIFIED);
-    }   
+        try {
+
+            $user = User::where('email', '=', $request->input('email'))->firstOrFail();
+
+
+            if (Hash::check($request->input('password'), $user->password)) {
+                $token = $user->createToken('user_token')->plainTextToken;
+
+                return response()->json([ 'user' => $user, 'token' => $token ], 200);
+            }
+
+            return response()->json([ 'error' => 'Something went wrong in login' ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'message' => 'Something went wrong in AuthController.login'
+            ]);
+        }
+    }
+
+    public function logout(LogoutRequest $request)
+    {
+        try {
+
+            $user = User::findOrFail($request->input('user_id'));
+
+            $user->tokens()->delete();
+
+            return response()->json('User logged out!', 200);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'message' => 'Something went wrong in AuthController.logout'
+            ]);
+        }
+    }
 }
