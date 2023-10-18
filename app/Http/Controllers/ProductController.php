@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\Product\ProductRequest;
+use App\Models\Product;
 
-use App\Http\Requests\Company\CompanyRequest;
-use App\Models\Company;
-
-class CompanyController extends Controller
+class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +13,12 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->get();
+            $Product = Product::where('active', true)->get();
 
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Product' => $Product
                 ]
                 , 200
             );
@@ -27,7 +26,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.index'
+                'message' => 'Something went wrong in ProductController.index'
             ]);
         }
     }
@@ -35,26 +34,22 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyRequest $request)
+    public function store(ProductRequest $request)
     {
         try {
 
-            $imageName = time().'.'.$request->image->extension();  
-
-            $request->image->move(public_path('images'), $imageName);
-            $saveDir = public_path('images').'/'.$imageName;
-
-            $Company = Company::create([
+            $Product = Product::create([
+                'local_id' => $request->local_id,
                 'name' => $request->name,
-                'image' => $saveDir,
-                'address' => $request->address,
-                'phone_number' => $request->phone_number,
+                'stock' => $request->stock,
+                'price' => $request->price,
+                'unidad' => $request->unidad
             ]);
-
+            
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Product' => $Product
                 ]
                 , 200
             );
@@ -62,7 +57,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.store'
+                'message' => 'Something went wrong in ProductController.store'
             ]);
         }
     }
@@ -74,12 +69,12 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->findOrFail($id);
+            $Product = Product::where('active', true)->findOrFail($id);
 
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Product' => $Product
                 ]
                 , 200
             );
@@ -87,7 +82,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.show'
+                'message' => 'Something went wrong in ProductController.show'
             ]);
         }
     }
@@ -95,26 +90,22 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CompanyRequest $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
-        try {
-            
-            $imageName = time().'.'.$request->image->extension();  
+        try {         
 
-            $request->image->move(public_path('images'), $imageName);
-            $saveDir = public_path('images').'/'.$imageName;
-
-            $Company = Company::where('active', true)->findOrFail($id);
-            $Company->name = $request->name;
-            $Company->image = $saveDir;
-            $Company->address = $request->address;
-            $Company->phone_number = $request->phone_number;
-            $Company->save();
+            $Product = Product::findOrFail($id);
+            $Product->local_id = $request->local_id;
+            $Product->name = $request->name;
+            $Product->stock = $request->stock;
+            $Product->price = $request->price;
+            $Product->unidad = $request->unidad;            
+            $Product->save();
                
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Product' => $Product
                 ]
                 , 200
             );
@@ -122,7 +113,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.update'
+                'message' => 'Something went wrong in ProductController.update'
             ]);
         }
     }
@@ -134,14 +125,14 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->findOrFail($id);
-            $Company->active = false;           
-            $Company->save();
+            $Product = Product::where('active', true)->findOrFail($id);
+            $Product->active = false;
+            $Product->save();
                
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'message' => 'Company Deleted'
+                    'message' => 'Product Deleted'
                 ]
                 , 200
             );
@@ -149,7 +140,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.destroy'
+                'message' => 'Something went wrong in ProductController.destroy'
             ]);
         }
     }

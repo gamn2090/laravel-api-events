@@ -17,7 +17,7 @@ class ClientController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'local' => $local
                 ]
                 , 200
@@ -51,7 +51,7 @@ class ClientController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Client' => $Client
                 ]
                 , 200
@@ -76,7 +76,7 @@ class ClientController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Client' => $Client
                 ]
                 , 200
@@ -110,7 +110,7 @@ class ClientController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Client' => $Client
                 ]
                 , 200
@@ -135,7 +135,7 @@ class ClientController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'message' => 'Client Deleted'
                 ]
                 , 200

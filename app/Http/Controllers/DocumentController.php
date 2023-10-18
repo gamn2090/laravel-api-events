@@ -17,7 +17,7 @@ class DocumentController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Document' => $Document
                 ]
                 , 200
@@ -44,7 +44,7 @@ class DocumentController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Document' => $Document
                 ]
                 , 200
@@ -69,7 +69,7 @@ class DocumentController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Document' => $Document
                 ]
                 , 200
@@ -96,7 +96,7 @@ class DocumentController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Document' => $Document
                 ]
                 , 200
@@ -121,7 +121,7 @@ class DocumentController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'message' => 'Document Deleted'
                 ]
                 , 200

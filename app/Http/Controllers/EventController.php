@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\Event\EventRequest;
+use App\Models\Event;
 
-use App\Http\Requests\Company\CompanyRequest;
-use App\Models\Company;
-
-class CompanyController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,12 +13,12 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->get();
+            $Event = Event::all();
 
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Event' => $Event
                 ]
                 , 200
             );
@@ -27,7 +26,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.index'
+                'message' => 'Something went wrong in EventController.index'
             ]);
         }
     }
@@ -35,7 +34,7 @@ class CompanyController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CompanyRequest $request)
+    public function store(EventRequest $request)
     {
         try {
 
@@ -44,17 +43,20 @@ class CompanyController extends Controller
             $request->image->move(public_path('images'), $imageName);
             $saveDir = public_path('images').'/'.$imageName;
 
-            $Company = Company::create([
+            $Event = Event::create([
                 'name' => $request->name,
+                'local_id' => $request->local_id,
+                'artist' => $request->artist,
+                'details' => $request->details,
+                'capacity' => $request->capacity,
                 'image' => $saveDir,
-                'address' => $request->address,
-                'phone_number' => $request->phone_number,
+                'date' => $request->date,
             ]);
 
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Event' => $Event
                 ]
                 , 200
             );
@@ -62,7 +64,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.store'
+                'message' => 'Something went wrong in EventController.store'
             ]);
         }
     }
@@ -74,12 +76,12 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->findOrFail($id);
+            $Event = Event::findOrFail($id);
 
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Event' => $Event
                 ]
                 , 200
             );
@@ -87,7 +89,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.show'
+                'message' => 'Something went wrong in EventController.show'
             ]);
         }
     }
@@ -95,26 +97,28 @@ class CompanyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(CompanyRequest $request, string $id)
+    public function update(EventRequest $request, string $id)
     {
         try {
-            
             $imageName = time().'.'.$request->image->extension();  
 
             $request->image->move(public_path('images'), $imageName);
             $saveDir = public_path('images').'/'.$imageName;
 
-            $Company = Company::where('active', true)->findOrFail($id);
-            $Company->name = $request->name;
-            $Company->image = $saveDir;
-            $Company->address = $request->address;
-            $Company->phone_number = $request->phone_number;
-            $Company->save();
+            $Event = Event::findOrFail($id);
+            $Event->name = $request->name;
+            $Event->local_id = $request->local_id;
+            $Event->artist = $request->artist;
+            $Event->details = $request->details;
+            $Event->capacity = $request->capacity;
+            $Event->image = $saveDir;
+            $Event->date = $request->date;
+            $Event->save();
                
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'Company' => $Company
+                    'Event' => $Event
                 ]
                 , 200
             );
@@ -122,7 +126,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.update'
+                'message' => 'Something went wrong in EventController.update'
             ]);
         }
     }
@@ -134,14 +138,22 @@ class CompanyController extends Controller
     {
         try {
 
-            $Company = Company::where('active', true)->findOrFail($id);
-            $Company->active = false;           
-            $Company->save();
+            $Event = Event::where('active', true)->findOrFail($id);
+            $Event->active = false;           
+            $Event->save();
                
             return response()->json(
                 [ 
                     'Ok'=> true,
-                    'message' => 'Company Deleted'
+                    'message' => 'Event Deleted'
+                ]
+                , 200
+            );
+               
+            return response()->json(
+                [ 
+                    'Ok'=> true,
+                    'message' => 'Event Deleted'
                 ]
                 , 200
             );
@@ -149,7 +161,7 @@ class CompanyController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
-                'message' => 'Something went wrong in CompanyController.destroy'
+                'message' => 'Something went wrong in EventController.destroy'
             ]);
         }
     }

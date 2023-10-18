@@ -17,7 +17,7 @@ class TableController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Table' => $Table
                 ]
                 , 200
@@ -45,7 +45,7 @@ class TableController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Table' => $Table
                 ]
                 , 200
@@ -70,7 +70,7 @@ class TableController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Table' => $Table
                 ]
                 , 200
@@ -98,7 +98,7 @@ class TableController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Table' => $Table
                 ]
                 , 200
@@ -123,7 +123,7 @@ class TableController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'message' => 'Table Deleted'
                 ]
                 , 200

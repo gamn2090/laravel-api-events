@@ -17,7 +17,7 @@ class LocalController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'local' => $local
                 ]
                 , 200
@@ -47,7 +47,7 @@ class LocalController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Local' => $Local
                 ]
                 , 200
@@ -72,7 +72,7 @@ class LocalController extends Controller
 
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Local' => $Local
                 ]
                 , 200
@@ -102,7 +102,7 @@ class LocalController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'Local' => $Local
                 ]
                 , 200
@@ -129,7 +129,7 @@ class LocalController extends Controller
                
             return response()->json(
                 [ 
-                    'ok'=> true,
+                    'Ok'=> true,
                     'message' => 'Local Deleted'
                 ]
                 , 200

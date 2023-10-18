@@ -24,4 +24,13 @@ class Client extends Model
         'document_number',
         'client_type',
     ];
+
+    public function invoice(){
+        return $this->hasMany(Invoice::class);
+    }
+
+    public function document(){
+        return $this->belongsTo(Document::class);
+    }
+
 }

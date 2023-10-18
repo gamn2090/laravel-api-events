@@ -23,5 +23,18 @@ class Invoice extends Model
         'taxes',
         'observation',
         'creation_date',
+        'active',
+        'status',
     ];
+
+    public function client()
+	{
+		return $this->belongsTo(Client::class);
+	}
+
+	public function detail()
+	{
+		return $this->hasMany(Detail::class);
+	}	
+
 }

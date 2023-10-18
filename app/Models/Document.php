@@ -17,4 +17,9 @@ class Document extends Model
     protected $fillable = [
         'description'
     ];
+
+    public function client(){
+        return $this->hasMany(Client::class);
+    }
+
 }

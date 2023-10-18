@@ -21,4 +21,9 @@ class Product extends Model
         'price',
         'unidad',
     ];
+
+    public function detail(){
+        return $this->hasMany(Detail::class);
+    }
+
 }
